@@ -1,15 +1,19 @@
 package src;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.X509Certificate;
 import java.util.Date;
 
 import javax.management.openmbean.InvalidKeyException;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.swing.JFrame;
@@ -19,34 +23,48 @@ public class BYODClient {
 
 	static String[] options = { "HMAC SHA MD5", "HMAC SHA 1", "HMAC SHA 256", "HMAC SHA 384", "HMAC SHA 512" };
 
-	public BYODClient() throws InvalidKeyException, SignatureException, NoSuchAlgorithmException {
-
-		// Constructor que abre una conexión Socket para enviar mensaje/MAC al
-
-		// servidor
+	public BYODClient()
+			throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, CertificateEncodingException {
 		try {
 			System.setProperty("javax.net.ssl.trustStore", "C:\\SSLStore");
 			System.setProperty("javax.net.ssl.trustStorePassword", "Gi30Se12Gi12Rgio08");
 			SSLSocketFactory socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 			SSLSocket socket = (SSLSocket) socketFactory.createSocket("localhost", 7070);
-			// crea un PrintWriter para enviar mensaje/MAC al servidor
+
+			/*
+			 * INFO CERTIFICADOS
+			 * 
+			 */
+			SSLSession sesion = socket.getSession();
+			System.out.println("Host: " + sesion.getPeerHost());
+			X509Certificate certificate = (X509Certificate) sesion.getPeerCertificates()[0];
+			System.out.println("Propietario: " + certificate.getSubjectDN());
+			System.out.println("Emisor: " + certificate.getIssuerDN());
+			System.out.println("Numero Serie: " + certificate.getSerialNumber());
+			System.out.println("to string:" + certificate.toString());
+			byte[] buf = certificate.getEncoded();
+			FileOutputStream os = new FileOutputStream("servidor.cer");
+			os.write(buf);
+			os.close();
+			/* Fin info certificados */
+
+			/* Crea un PrintWriter para enviar mensaje/MAC al servidor */
 			PrintWriter output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 			String mensaje1 = JOptionPane.showInputDialog(null, "Introduzca el username: ");
 			String mensaje2 = JOptionPane.showInputDialog(null, "Introduzca la contraseña: ");
 			String mensaje3 = JOptionPane.showInputDialog(null, "Introduzca el mensaje: ");
 			String mensaje = mensaje1 + " " + mensaje2 + " " + mensaje3; // TODO hacer el parseado bien y eso
+			/* FIN crea un PrintWriter para enviar mensaje/MAC al servidor */
+
 			/*
 			 * Devuelve el indice de la opción elegida, y es tratada en la funcion
 			 * calculateHMAC.
 			 */
-
 			int algoritmo = JOptionPane.showOptionDialog(null,
 					"Seleccione el algoritmo a emplear: (Por defecto HMAC SHA 512)", "Click a button",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 			output.println(mensaje); // envio del mensaje al servidor
-			// habría que calcular el correspondiente MAC con la clave
-			// compartida por servidor/cliente
-			String key = secureCore.importPass();
+			/* FIN indice de la opción elegida */
 
 			/*
 			 * Parte del codigo para evitar ataques de replay
@@ -62,7 +80,7 @@ public class BYODClient {
 			 * 
 			 * 
 			 */
-
+			String key = secureCore.importPass();
 			Long time = Long.parseLong(String.valueOf(new Date().getTime()).substring(0, 12));
 			String mensajeTime = mensaje + time;
 			String macdelMensaje = secureCore.calculateHMAC(mensajeTime, key, algoritmo);
@@ -83,6 +101,8 @@ public class BYODClient {
 			output.close();
 			input.close();
 			socket.close();
+			/* FIN Parte del codigo para evitar ataques de replay */
+
 		} // end try
 		catch (IOException ioException) {
 			ioException.printStackTrace();
@@ -94,7 +114,8 @@ public class BYODClient {
 	}
 
 	// ejecución del cliente de verificación de la integridad
-	public static void main(String args[]) throws InvalidKeyException, SignatureException, NoSuchAlgorithmException {
+	public static void main(String args[])
+			throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, CertificateEncodingException {
 		new BYODClient();
 	}
 }

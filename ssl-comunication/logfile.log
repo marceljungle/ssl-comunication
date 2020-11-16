@@ -72,3 +72,71 @@ nov. 16, 2020 11:50:54 A. M. src.BYODServer runServer
 INFO: Cantidad de mensajes integros: 10
 nov. 16, 2020 11:50:54 A. M. src.BYODServer runServer
 INFO: Cantidad total de mensajes: 10
+nov. 16, 2020 12:45:31 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 12:45:47 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 12:47:38 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 12:48:36 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 12:51:02 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 12:51:54 P. M. src.BYODServer runServer
+INFO: Mensaje enviado integro
+nov. 16, 2020 12:51:54 P. M. src.BYODServer runServer
+INFO: Cantidad de mensajes integros: 14
+nov. 16, 2020 12:51:54 P. M. src.BYODServer runServer
+INFO: Cantidad total de mensajes: 14
+nov. 16, 2020 12:57:03 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 12:57:04 P. M. src.BYODServer runServer
+WARNING: Mensaje enviado no integro ó hay ataques de replay
+nov. 16, 2020 12:57:04 P. M. src.BYODServer runServer
+INFO: Cantidad de mensajes integros: 15
+nov. 16, 2020 12:57:04 P. M. src.BYODServer runServer
+INFO: Cantidad total de mensajes: 15
+nov. 16, 2020 1:00:41 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:00:55 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:09:34 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:09:47 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:11:29 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:11:38 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:14:04 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:14:10 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:14:46 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:14:53 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:16:09 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:16:16 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:17:48 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:17:53 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:19:48 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:20:02 P. M. src.BYODServer runServer
+INFO: Mensaje enviado integro
+nov. 16, 2020 1:20:02 P. M. src.BYODServer runServer
+INFO: Cantidad de mensajes integros: 15
+nov. 16, 2020 1:20:02 P. M. src.BYODServer runServer
+INFO: Cantidad total de mensajes: 16
+nov. 16, 2020 1:20:58 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 16, 2020 1:21:32 P. M. src.BYODServer runServer
+INFO: Mensaje enviado integro
+nov. 16, 2020 1:21:32 P. M. src.BYODServer runServer
+INFO: Cantidad de mensajes integros: 16
+nov. 16, 2020 1:21:32 P. M. src.BYODServer runServer
+INFO: Cantidad total de mensajes: 17

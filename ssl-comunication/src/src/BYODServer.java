@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
+import java.security.cert.CertificateEncodingException;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.FileHandler;
@@ -18,7 +19,6 @@ import java.util.logging.SimpleFormatter;
 import javax.management.openmbean.InvalidKeyException;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 
 public class BYODServer {
@@ -37,8 +37,8 @@ public class BYODServer {
 	}
 
 	// ejecución del servidor para escuchar peticiones de los clientes
-	private void runServer()
-			throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, SecurityException, IOException {
+	private void runServer() throws InvalidKeyException, SignatureException, NoSuchAlgorithmException,
+			SecurityException, IOException, CertificateEncodingException {
 
 		LOGGER.setLevel(Level.INFO);
 		Handler fileHandler = new FileHandler("logfile.log", true);
@@ -47,6 +47,7 @@ public class BYODServer {
 		LOGGER.addHandler(fileHandler);
 		while (true) {
 			// espera las peticiones del cliente para comprobar mensaje/MAC
+
 			try {
 
 				LOGGER.log(Level.INFO, "Servidor a la espera de clientes");
@@ -57,12 +58,12 @@ public class BYODServer {
 				// abre un PrintWriter para enviar datos al cliente
 				PrintWriter output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 				// se lee del cliente el mensaje y el macdelMensajeEnviado
+
 				String mensaje = input.readLine();
 				String macdelMensajeEnviado = input.readLine();
 				String key = secureCore.importPass();
 				Integer algo = Integer.parseInt(input.readLine());
-				SSLSession sesion = ((SSLSocket) socket).getSession();
-				System.out.println("Host: " + sesion.getPeerHost());
+
 				/*
 				 * Parte del codigo para evitar el replay
 				 * 
@@ -96,7 +97,7 @@ public class BYODServer {
 					LOGGER.log(Level.WARNING, "Mensaje enviado no integro ó hay ataques de replay");
 					output.println("Mensaje enviado no integro ó hay ataques de replay ");
 				}
-				/* Parte del codigo para evitar el replay */
+				/* FIN Parte del codigo para evitar el replay */
 
 				/*
 				 * Seguimiento de los mensajes enviados (estadística)
