@@ -8,8 +8,10 @@ import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.security.cert.CertificateEncodingException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -47,9 +49,7 @@ public class BYODServer {
 		LOGGER.addHandler(fileHandler);
 		while (true) {
 			// espera las peticiones del cliente para comprobar mensaje/MAC
-
 			try {
-
 				LOGGER.log(Level.INFO, "Servidor a la espera de clientes");
 				System.err.print("Esperando conexiones de clientes...");
 				SSLSocket socket = (SSLSocket) serverSocket.accept();
@@ -98,6 +98,30 @@ public class BYODServer {
 					output.println("Mensaje enviado no integro ó hay ataques de replay ");
 				}
 				/* FIN Parte del codigo para evitar el replay */
+
+				/* Comprobar usuario */
+				// System.out.println("Este es el puto mensje: " + mensaje);
+				List<String> mensajeSpliteado = Arrays.asList(mensaje.split("¬"));
+				System.out.println();
+				CheckUsers map = new CheckUsers();
+				Map<String, String> dict = map.CSVReader();
+				System.out.println(dict);
+				dict = map.CSVReader();
+				System.out.println("Lo que hay en fuera: " + dict);
+				System.out.println("Lo que hay dentro: " + mensajeSpliteado);
+
+				if (dict.containsKey(mensajeSpliteado.get(0))) {
+					if (dict.containsValue(mensajeSpliteado.get(1))) {
+						output.println("1");
+					} else {
+						output.println("2");
+					}
+
+				} else {
+					output.println("3");
+				}
+
+				/* FIN Comprobar usuario */
 
 				/*
 				 * Seguimiento de los mensajes enviados (estadística)

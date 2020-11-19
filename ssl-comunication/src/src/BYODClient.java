@@ -53,7 +53,7 @@ public class BYODClient {
 			String mensaje1 = JOptionPane.showInputDialog(null, "Introduzca el username: ");
 			String mensaje2 = JOptionPane.showInputDialog(null, "Introduzca la contraseña: ");
 			String mensaje3 = JOptionPane.showInputDialog(null, "Introduzca el mensaje: ");
-			String mensaje = mensaje1 + " " + mensaje2 + " " + mensaje3; // TODO hacer el parseado bien y eso
+			String mensaje = mensaje1 + "¬" + mensaje2 + "¬" + mensaje3; // TODO hacer el parseado bien y eso
 			/* FIN crea un PrintWriter para enviar mensaje/MAC al servidor */
 
 			/*
@@ -97,6 +97,15 @@ public class BYODClient {
 				JOptionPane.showMessageDialog(f, "¡El mensaje ha sido enviado integro!");
 			} else {
 				JOptionPane.showMessageDialog(f, "¡Mensaje enviado no integro ó hay ataques de replay!");
+			}
+			String respuestaLogueo = input.readLine();
+			System.out.println("Esta es la respuesta: " + respuestaLogueo);
+			if (respuestaLogueo.contains("1")) {
+				JOptionPane.showMessageDialog(null, "¡Usuario logueado correctamente!");
+			} else if (respuestaLogueo.contains("2")) {
+				JOptionPane.showMessageDialog(null, "¡Contraseña incorrecta!");
+			} else if (respuestaLogueo.contains("3")) {
+				JOptionPane.showMessageDialog(null, "El usuario no existe");
 			}
 			output.close();
 			input.close();
