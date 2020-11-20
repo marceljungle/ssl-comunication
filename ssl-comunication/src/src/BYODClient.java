@@ -63,39 +63,18 @@ public class BYODClient {
 			String mensaje1 = JOptionPane.showInputDialog(null, "Introduzca el username: ");
 			String mensaje2 = JOptionPane.showInputDialog(null, "Introduzca la contraseña: ");
 			String mensaje3 = JOptionPane.showInputDialog(null, "Introduzca el mensaje: ");
-			String mensaje = mensaje1 + "¬" + mensaje2 + "¬" + mensaje3; // TODO hacer el parseado bien y eso
 			/* FIN crea un PrintWriter para enviar mensaje/MAC al servidor */
 
 			/*
 			 * Devuelve el indice de la opción elegida, y es tratada en la funcion
 			 * calculateHMAC.
 			 */
-			int algoritmo = JOptionPane.showOptionDialog(null,
-					"Seleccione el algoritmo a emplear: (Por defecto HMAC SHA 512)", "Click a button",
-					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-			output.println(mensaje); // envio del mensaje al servidor
+			output.println(mensaje3); // envio del mensaje al servidor
+			output.println(mensaje1); // envio del mensaje al servidor
+			output.println(mensaje2); // envio del mensaje al servidor
 			/* FIN indice de la opción elegida */
 
-			/*
-			 * Parte del codigo para evitar ataques de replay
-			 * 
-			 * En el caso del cliente, recogemos el valor en milisegundos actual del tiempo
-			 * y lo concatenamos al mensaje y calculamos su hmac. Al servidor vamos a
-			 * mandarle el mensaje sin la concatenación del tiempo, sin embargo, la hmac si
-			 * va a ser el resultado del mensaje concatenado al tiempo.
-			 * 
-			 * De esta forma, el servidor para poder ver si la hmac coincide, deberá
-			 * calcular la hmac probando los 25 valores anteriores del tiempo, si alguno
-			 * coincide, significa que la operación es válida.
-			 * 
-			 * 
-			 */
-			String key = secureCore.importPass();
-			Long time = Long.parseLong(String.valueOf(new Date().getTime()).substring(0, 12));
-			String mensajeTime = mensaje + time;
-			String macdelMensaje = secureCore.calculateHMAC(mensajeTime, key, algoritmo);
-			output.println(macdelMensaje);
-			output.println(algoritmo);
+			
 			output.flush();
 			// crea un objeto BufferedReader para leer la respuesta del servidor
 			BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -106,14 +85,6 @@ public class BYODClient {
 				JOptionPane.showMessageDialog(null, "¡Contraseña incorrecta!");
 			} else if (respuestaLogueo.contains("3")) {
 				JOptionPane.showMessageDialog(null, "El usuario no existe");
-			}
-			String respuesta = input.readLine(); // lee la respuesta del servidor
-			JFrame f;
-			f = new JFrame();
-			if (respuesta.contains("Mensaje enviado integro")) {
-				JOptionPane.showMessageDialog(f, "¡El mensaje ha sido enviado integro!");
-			} else {
-				JOptionPane.showMessageDialog(f, "¡Mensaje enviado no integro ó hay ataques de replay!");
 			}
 			output.close();
 			input.close();

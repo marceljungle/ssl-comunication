@@ -16,13 +16,14 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.management.openmbean.InvalidKeyException;
 
 public class secureCore {
-	private static final String HMAC_SHA512 = "HmacSHA512";
+	/*private static final String HMAC_SHA512 = "HmacSHA512";
 	private static final String HMAC_SHA384 = "HmacSHA384";
 	private static final String HMAC_SHA256 = "HmacSHA256";
 	private static final String HMAC_SHA1 = "HmacSHA1";
 	private static final String HMAC_MD5 = "HmacMD5";
+	*/
 	
-	public static String importPass() {
+	/*public static String importPass() {
 		Properties prop = new Properties();
 		try {
 			FileInputStream ip = new FileInputStream(importConfig().get(0));
@@ -38,20 +39,15 @@ public class secureCore {
 		return prop.getProperty("pass");
 	}
 
-	public static List<String> importConfig() {
-		Properties prop = new Properties();
-		try {
-			FileInputStream ip = new FileInputStream("src//config.properties");
-			try {
-				prop.load(ip);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
-			}
-		} catch (FileNotFoundException e) {
-			System.out.println(e.getMessage());
+	
+	
+	private static String toHexString(byte[] bytes) {
+		@SuppressWarnings("resource")
+		Formatter formatter = new Formatter();
+		for (byte b : bytes) {
+			formatter.format("%02x", b);
 		}
-		return Arrays.asList(prop.getProperty("dirPass"), prop.getProperty("dirStats"));
+		return formatter.toString();
 	}
 	
 	public static String calculateHMAC(String data, String key, int algo)
@@ -83,6 +79,7 @@ public class secureCore {
 		}
 		return toHexString(mac.doFinal(data.getBytes()));
 	}
+	*/
 
 	public static List<Integer> readStats() {
 		Properties prop = new Properties();
@@ -100,7 +97,21 @@ public class secureCore {
 				Integer.parseInt(prop.getProperty("unsuccessfull")));
 
 	}
-
+	public static List<String> importConfig() {
+		Properties prop = new Properties();
+		try {
+			FileInputStream ip = new FileInputStream("src//config.properties");
+			try {
+				prop.load(ip);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println(e.getMessage());
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+		return Arrays.asList(prop.getProperty("dirPass"), prop.getProperty("dirStats"));
+	}
 	public static void writeStats(String key, String value) throws IOException {
 		Properties prop = new Properties();
 		try {
@@ -114,13 +125,6 @@ public class secureCore {
 		}
 	}
 
-	private static String toHexString(byte[] bytes) {
-		@SuppressWarnings("resource")
-		Formatter formatter = new Formatter();
-		for (byte b : bytes) {
-			formatter.format("%02x", b);
-		}
-		return formatter.toString();
-	}
+
 
 }

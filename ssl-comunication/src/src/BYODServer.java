@@ -63,91 +63,34 @@ public class BYODServer {
 				// se lee del cliente el mensaje y el macdelMensajeEnviado
 
 				String mensaje = input.readLine();
-				String macdelMensajeEnviado = input.readLine();
-				String key = secureCore.importPass();
-				Integer algo = Integer.parseInt(input.readLine());
+				String usuario = input.readLine();
+				String contraseña = input.readLine();
 				
 				
-				/* Comprobar usuario */
-				// System.out.println("Este es el puto mensje: " + mensaje);
-				List<String> mensajeSpliteado = Arrays.asList(mensaje.split("¬"));
+				/* Comprobar usuario + Logging + logging stats*/
 				CheckUsers map = new CheckUsers();
 				Map<String, String> dict = map.CSVReader();
 				dict = map.CSVReader();
-				if (dict.containsKey(mensajeSpliteado.get(0))) {
-					if (dict.containsValue(mensajeSpliteado.get(1))) {
+				List<Integer> stats = secureCore.readStats();
+				if (dict.containsKey(usuario)) {
+					if (dict.containsValue(contraseña)) {
 						output.println("1");
+						LOGGER.log(Level.INFO, "Usuario logueado");
+						secureCore.writeStats("successfull", String.valueOf(stats.get(0) + 1));
 					} else {
 						output.println("2");
+						LOGGER.log(Level.WARNING, "¡Error en el logueo del usuario!");
+						secureCore.writeStats("unsuccessfull", String.valueOf(stats.get(1) + 1));
 					}
 
 				} else {
 					output.println("3");
-				}
-				/* FIN Comprobar usuario */
-				
-				
-				
-				
-				/*
-				 * Parte del codigo para evitar el replay
-				 * 
-				 * Mediante el valor del tiempo que recogemos en el servidor, entramos en un
-				 * bucle y comprobamos los 25 milisegundos anteriores concatenandolos al mensaje
-				 * y sacando la hmac que le corresponde. Si en alguno de los valores conincide,
-				 * significa que la operación es válida. En caso de que no conincida, podemos
-				 * estar ante un caso de ataque por replay o simplemente la solicitud ha tardado
-				 * demasiado en llegar al servidor.
-				 * 
-				 */
-				String cadena;
-				String macdelMensajeCalculado;
-				Long time = Long.parseLong(String.valueOf(new Date().getTime()).substring(0, 12));
-				long newTime;
-				int succeed = 0; // si 0, no ha salido bien
-				for (int i = 0; i < 50; i++) {
-					newTime = time - i;
-					cadena = mensaje + newTime;
-					macdelMensajeCalculado = secureCore.calculateHMAC(cadena, key, algo);
-					// a continuación habría que verificar el MAC
-					if (macdelMensajeEnviado.equals(macdelMensajeCalculado)) {
-						LOGGER.log(Level.INFO, "Mensaje enviado integro");
-						output.println("Mensaje enviado integro");
-						System.err.println(mensaje);
-						succeed = 1;
-						break;
-					}
-				}
-				if (succeed == 0) {
-					LOGGER.log(Level.WARNING, "Mensaje enviado no integro ó hay ataques de replay");
-					output.println("Mensaje enviado no integro ó hay ataques de replay ");
-				}
-				/* FIN Parte del codigo para evitar el replay */
-
-				
-
-				/*
-				 * Seguimiento de los mensajes enviados (estadística)
-				 * 
-				 */
-				List<Integer> stats = secureCore.readStats();
-				if (succeed == 1) {
-					secureCore.writeStats("successfull", String.valueOf(stats.get(0) + 1));
-					LOGGER.log(Level.INFO, "Cantidad de mensajes integros: " + String.valueOf(stats.get(0) + 1));
-					LOGGER.log(Level.INFO,
-							"Cantidad total de mensajes: " + String.valueOf(stats.get(0) + 1 + stats.get(1)));
-				} else {
+					LOGGER.log(Level.WARNING, "¡Error en el logueo del usuario!");
 					secureCore.writeStats("unsuccessfull", String.valueOf(stats.get(1) + 1));
-					LOGGER.log(Level.INFO, "Cantidad de mensajes integros: " + String.valueOf(stats.get(0) + 1));
-					LOGGER.log(Level.INFO,
-							"Cantidad total de mensajes: " + String.valueOf(stats.get(0) + stats.get(1) + 1));
 				}
-				/*FIN Seguimiento de los mensajes enviados (estadística) */
+				System.out.println(mensaje);
 				
-				
-				
-				
-				
+				/* FIN Comprobar usuario + Logging + logging stats */
 				output.close();
 				input.close();
 				socket.close();
