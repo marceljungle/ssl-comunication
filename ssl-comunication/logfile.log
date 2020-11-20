@@ -352,3 +352,23 @@ nov. 20, 2020 2:42:16 P. M. src.BYODServer runServer
 INFO: Servidor a la espera de clientes
 nov. 20, 2020 2:43:57 P. M. src.BYODServer runServer
 INFO: Usuario logueado
+nov. 20, 2020 5:35:12 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 20, 2020 5:36:24 P. M. src.BYODServer runServer
+WARNING: ¡Error en el logueo del usuario!
+nov. 20, 2020 5:40:15 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 20, 2020 5:40:59 P. M. src.BYODServer runServer
+INFO: Usuario logueado
+nov. 20, 2020 5:42:50 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 20, 2020 5:43:15 P. M. src.BYODServer runServer
+INFO: Usuario logueado
+nov. 20, 2020 5:43:15 P. M. src.BYODServer runServer
+INFO: Mensaje recibido
+nov. 20, 2020 5:43:50 P. M. src.BYODServer runServer
+INFO: Servidor a la espera de clientes
+nov. 20, 2020 5:44:20 P. M. src.BYODServer runServer
+INFO: Usuario logueado
+nov. 20, 2020 5:44:20 P. M. src.BYODServer runServer
+INFO: Mensaje recibido

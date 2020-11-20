@@ -77,6 +77,8 @@ public class BYODServer {
 						output.println("1");
 						LOGGER.log(Level.INFO, "Usuario logueado");
 						secureCore.writeStats("successfull", String.valueOf(stats.get(0) + 1));
+						LOGGER.log(Level.INFO, "Mensaje recibido");
+						System.out.println("\nMensaje recibido desde " + usuario + ": " + mensaje + "\n");
 					} else {
 						output.println("2");
 						LOGGER.log(Level.WARNING, "¡Error en el logueo del usuario!");
@@ -88,7 +90,7 @@ public class BYODServer {
 					LOGGER.log(Level.WARNING, "¡Error en el logueo del usuario!");
 					secureCore.writeStats("unsuccessfull", String.valueOf(stats.get(1) + 1));
 				}
-				System.out.println(mensaje);
+				
 				
 				/* FIN Comprobar usuario + Logging + logging stats */
 				output.close();
