@@ -27,7 +27,7 @@ public class BYODServer {
 
 	private SSLServerSocket serverSocket;
 	private final static Logger LOGGER = Logger.getLogger(BYODClient.class.getName());
-
+	static String[] ciphers = {"TLS_AES_128_GCM_SHA256"};
 	// Constructor
 	public BYODServer() throws Exception {
 		// ServerSocketFactory para construir los ServerSockets
@@ -36,6 +36,9 @@ public class BYODServer {
 		SSLServerSocketFactory socketFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 		// creación de un objeto ServerSocket (se establece el puerto)
 		serverSocket = (SSLServerSocket) socketFactory.createServerSocket(7070);
+		//serverSocket.setEnabledCipherSuites(ciphers);
+		List<String> enCiphersuite=Arrays.asList(serverSocket.getEnabledCipherSuites());
+		System.out.println("Los ciphersuites soportados son: "+ enCiphersuite);
 	}
 
 	// ejecución del servidor para escuchar peticiones de los clientes
@@ -63,7 +66,29 @@ public class BYODServer {
 				String macdelMensajeEnviado = input.readLine();
 				String key = secureCore.importPass();
 				Integer algo = Integer.parseInt(input.readLine());
+				
+				
+				/* Comprobar usuario */
+				// System.out.println("Este es el puto mensje: " + mensaje);
+				List<String> mensajeSpliteado = Arrays.asList(mensaje.split("¬"));
+				CheckUsers map = new CheckUsers();
+				Map<String, String> dict = map.CSVReader();
+				dict = map.CSVReader();
+				if (dict.containsKey(mensajeSpliteado.get(0))) {
+					if (dict.containsValue(mensajeSpliteado.get(1))) {
+						output.println("1");
+					} else {
+						output.println("2");
+					}
 
+				} else {
+					output.println("3");
+				}
+				/* FIN Comprobar usuario */
+				
+				
+				
+				
 				/*
 				 * Parte del codigo para evitar el replay
 				 * 
@@ -99,29 +124,7 @@ public class BYODServer {
 				}
 				/* FIN Parte del codigo para evitar el replay */
 
-				/* Comprobar usuario */
-				// System.out.println("Este es el puto mensje: " + mensaje);
-				List<String> mensajeSpliteado = Arrays.asList(mensaje.split("¬"));
-				System.out.println();
-				CheckUsers map = new CheckUsers();
-				Map<String, String> dict = map.CSVReader();
-				System.out.println(dict);
-				dict = map.CSVReader();
-				System.out.println("Lo que hay en fuera: " + dict);
-				System.out.println("Lo que hay dentro: " + mensajeSpliteado);
-
-				if (dict.containsKey(mensajeSpliteado.get(0))) {
-					if (dict.containsValue(mensajeSpliteado.get(1))) {
-						output.println("1");
-					} else {
-						output.println("2");
-					}
-
-				} else {
-					output.println("3");
-				}
-
-				/* FIN Comprobar usuario */
+				
 
 				/*
 				 * Seguimiento de los mensajes enviados (estadística)
@@ -139,6 +142,12 @@ public class BYODServer {
 					LOGGER.log(Level.INFO,
 							"Cantidad total de mensajes: " + String.valueOf(stats.get(0) + stats.get(1) + 1));
 				}
+				/*FIN Seguimiento de los mensajes enviados (estadística) */
+				
+				
+				
+				
+				
 				output.close();
 				input.close();
 				socket.close();

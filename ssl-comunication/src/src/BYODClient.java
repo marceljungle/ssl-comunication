@@ -10,7 +10,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import javax.management.openmbean.InvalidKeyException;
 import javax.net.ssl.SSLSession;
@@ -22,15 +24,23 @@ import javax.swing.JOptionPane;
 public class BYODClient {
 
 	static String[] options = { "HMAC SHA MD5", "HMAC SHA 1", "HMAC SHA 256", "HMAC SHA 384", "HMAC SHA 512" };
-
+	static String[] ciphers = {"TLS_AES_128_GCM_SHA256"};
 	public BYODClient()
 			throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, CertificateEncodingException {
 		try {
 			System.setProperty("javax.net.ssl.trustStore", "C:\\SSLStore");
 			System.setProperty("javax.net.ssl.trustStorePassword", "Gi30Se12Gi12Rgio08");
+			System.setProperty("jdk.tls.client.protocols", "TLSv1.3");
+			System.setProperty("https.protocols", "TLSv1.3");
 			SSLSocketFactory socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 			SSLSocket socket = (SSLSocket) socketFactory.createSocket("localhost", 7070);
-
+			socket.setEnabledCipherSuites(ciphers);
+			
+			/* ver los cipher suites usados */
+			
+			List<String> enCiphersuite=Arrays.asList(socket.getEnabledCipherSuites());
+			System.out.println("Los ciphersuites soportados son: "+ enCiphersuite);
+			System.out.println("El ciphersuit de la sesión es: "+socket.getSession().getCipherSuite() );
 			/*
 			 * INFO CERTIFICADOS
 			 * 
@@ -89,23 +99,21 @@ public class BYODClient {
 			output.flush();
 			// crea un objeto BufferedReader para leer la respuesta del servidor
 			BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			String respuesta = input.readLine(); // lee la respuesta del servidor
-			JFrame f;
-			f = new JFrame();
-			System.out.println(respuesta);
-			if (respuesta.contains("Mensaje enviado integro")) {
-				JOptionPane.showMessageDialog(f, "¡El mensaje ha sido enviado integro!");
-			} else {
-				JOptionPane.showMessageDialog(f, "¡Mensaje enviado no integro ó hay ataques de replay!");
-			}
 			String respuestaLogueo = input.readLine();
-			System.out.println("Esta es la respuesta: " + respuestaLogueo);
 			if (respuestaLogueo.contains("1")) {
 				JOptionPane.showMessageDialog(null, "¡Usuario logueado correctamente!");
 			} else if (respuestaLogueo.contains("2")) {
 				JOptionPane.showMessageDialog(null, "¡Contraseña incorrecta!");
 			} else if (respuestaLogueo.contains("3")) {
 				JOptionPane.showMessageDialog(null, "El usuario no existe");
+			}
+			String respuesta = input.readLine(); // lee la respuesta del servidor
+			JFrame f;
+			f = new JFrame();
+			if (respuesta.contains("Mensaje enviado integro")) {
+				JOptionPane.showMessageDialog(f, "¡El mensaje ha sido enviado integro!");
+			} else {
+				JOptionPane.showMessageDialog(f, "¡Mensaje enviado no integro ó hay ataques de replay!");
 			}
 			output.close();
 			input.close();
