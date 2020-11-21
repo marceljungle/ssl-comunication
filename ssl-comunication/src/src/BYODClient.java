@@ -34,7 +34,7 @@ public class BYODClient {
 			System.setProperty("https.protocols", "TLSv1.3");
 			SSLSocketFactory socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 			SSLSocket socket = (SSLSocket) socketFactory.createSocket("localhost", 7070);
-			socket.setEnabledCipherSuites(ciphers);
+			//socket.setEnabledCipherSuites(ciphers);
 			
 			/* ver los cipher suites usados */
 			
