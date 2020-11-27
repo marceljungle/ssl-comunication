@@ -73,7 +73,7 @@ public class BYODServer {
 				dict = map.CSVReader();
 				List<Integer> stats = secureCore.readStats();
 				if (dict.containsKey(usuario)) {
-					if (dict.containsValue(contraseña)) {
+					if (dict.containsValue(secureCore.mesageDigest(contraseña))) {
 						output.println("1");
 						LOGGER.log(Level.INFO, "Usuario logueado");
 						secureCore.writeStats("successfull", String.valueOf(stats.get(0) + 1));

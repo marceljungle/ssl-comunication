@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.util.Arrays;
@@ -124,7 +126,19 @@ public class secureCore {
 			System.out.println(e.getMessage());
 		}
 	}
-
-
-
+	private static String toHexString(byte[] bytes) {
+		@SuppressWarnings("resource")
+		Formatter formatter = new Formatter();
+		for (byte b : bytes) {
+			formatter.format("%02x", b);
+		}
+		return formatter.toString();
+	}
+	
+	public static String mesageDigest(String originalString) throws NoSuchAlgorithmException {
+		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		byte[] encodedhash = digest.digest(
+				  originalString.getBytes(StandardCharsets.UTF_8));
+		return toHexString(encodedhash);
+	}
 }
